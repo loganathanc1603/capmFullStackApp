@@ -23,3 +23,7 @@ File or Folder | Purpose
 ## Learn More
 
 Learn more at https://cap.cloud.sap/docs/get-started/.
+
+Git link: https://github.com/SAP-samples/cloud-cap-risk-management/tree/cap/launchpage
+
+Course link: https://developers.sap.com/mission.btp-application-cap-e2e.html

@@ -5,7 +5,7 @@ using {sap.ui.riskmanagement as my} from '../db/schema';
 service RiskService {
   entity Risks @(restrict : [
     {
-      grant : ['READ'],
+      grant : ['READ','WRITE'],
       to    : ['RiskViewer']
     },
     {
@@ -17,7 +17,7 @@ service RiskService {
 
   entity Mitigations @(restrict : [
     {
-      grant : ['READ'],
+      grant : ['READ','WRITE'],
       to    : ['RiskViewer']
     },
     {
