@@ -32,7 +32,10 @@
                         "additionalParameters": "allowed"
                     },
                     "semanticObject": "Risks",
-                    "action": "display"
+                    "action": "display",
+                    "title": "{{appTitle}}",
+                    "subTitle": "Fiori Elements App",
+                    "icon": "sap-icon://alert"
                 }
             }
         }
@@ -40,7 +43,7 @@
     "sap.ui": {
         "technology": "UI5",
         "icons": {
-            "icon": "",
+            "icon": "sap-icon://alert",
             "favIcon": "",
             "phone": "",
             "phone@2": "",

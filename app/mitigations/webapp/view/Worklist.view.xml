@@ -22,6 +22,7 @@
 					<Toolbar>
 						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}"/>
 						<ToolbarSpacer />
+                        <Button id="ID_ADD_BUTTON" text="Add" press="onPressAdd"/>
 						<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search=".onSearch" width="auto">
 						</SearchField>
 					</Toolbar>

@@ -29,7 +29,10 @@
                         "additionalParameters": "allowed"
                     },
                     "semanticObject": "Mitigations",
-                    "action": "display"
+                    "action": "display",
+                    "title": "{{appTitle}}",
+                    "subTitle": "Freestyle App",
+                    "icon": "sap-icon://dimension"
                 }
             }
         }
@@ -45,7 +48,7 @@
     "sap.ui": {
         "technology": "UI5",
         "icons": {
-            "icon": "sap-icon://task",
+            "icon": "sap-icon://dimension",
             "favIcon": "",
             "phone": "",
             "phone@2": "",

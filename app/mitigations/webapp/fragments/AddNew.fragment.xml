@@ -1,0 +1,38 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+   xmlns:core="sap.ui.core">
+   <Dialog title="Add Mitigation">
+      	<f:SimpleForm id="ID_SF_ADD_MITIGATION"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			title="Create new mitigation"
+			labelSpanXL="3"
+			labelSpanL="3"
+			labelSpanM="3"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="4"
+			emptySpanL="4"
+			emptySpanM="4"
+			emptySpanS="0"
+			columnsXL="1"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false" >
+			<f:content>
+				<Label text="Description" />
+				<Input id="ID_IP_DESC" change="onChange" />
+				<Label text="Owner" />
+				<Input value=""/>				
+				<Label text="Timeline" />
+				<Input value=""/>
+			</f:content>
+		</f:SimpleForm>
+    <buttons>
+        <Button text="Add" type="Ghost" press="onPressAddNewItem"/>
+        <Button id="ID_BTN_CLOSE" text="Close" type="Reject" press="onPressClose"/>
+    </buttons>
+   </Dialog>
+</core:FragmentDefinition>
