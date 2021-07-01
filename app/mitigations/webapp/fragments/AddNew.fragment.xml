@@ -22,17 +22,17 @@
 			columnsM="1"
 			singleContainerFullSize="false" >
 			<f:content>
-				<Label text="Description" />
+				<Label text="Description" required="true"/>
 				<Input id="ID_IP_DESC" change="onChange" />
-				<Label text="Owner" />
-				<Input value=""/>				
-				<Label text="Timeline" />
-				<Input value=""/>
+				<Label text="Owner" required="true"/>
+				<Input id="ID_IP_OWNER" value=""/>				
+				<Label text="Timeline" required="true"/>
+				<Input id="ID_IP_TIMELINE" value=""/>
 			</f:content>
 		</f:SimpleForm>
     <buttons>
         <Button text="Add" type="Ghost" press="onPressAddNewItem"/>
-        <Button id="ID_BTN_CLOSE" text="Close" type="Reject" press="onPressClose"/>
+        <Button text="Close" type="Reject" press="onPressClose"/>
     </buttons>
    </Dialog>
 </core:FragmentDefinition>
