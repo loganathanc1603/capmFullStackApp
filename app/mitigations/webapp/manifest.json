@@ -13,10 +13,10 @@
         "resources": "resources.json",
         "dataSources": {
             "mainService": {
-                "uri": "/service/risk/",
+                "uri": "/v2/service/risk/",
                 "type": "OData",
                 "settings": {
-                    "odataVersion": "4.0",
+                    "odataVersion": "2.0",
                     "localUri": "localService/metadata.xml"
                 }
             }
