@@ -32,5 +32,6 @@ Build Command: mbt build -t ./
 Push command: cf deploy cpapp_1.0.0.mtar
 
 Important commands CF build & deploy:
+
 mbt build
 cf deploy mta_archives/bookshop_1.0.0.mtar

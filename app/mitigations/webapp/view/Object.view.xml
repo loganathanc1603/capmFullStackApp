@@ -17,8 +17,7 @@
         </semantic:titleHeading>
 
         <semantic:headerContent>
-            <ObjectNumber
-            />
+            <ObjectNumber number="{ID}"           />
         </semantic:headerContent>
 
         <semantic:sendEmailAction>

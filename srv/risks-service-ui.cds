@@ -76,7 +76,7 @@ annotate RiskService.Risks with {
     miti @(Common : {
         //show text, not id for mitigation in the context of risks
         Text            : miti.description,
-        TextArrangement : #TextOnly,
+        TextArrangement : #TextSeparate,
         ValueList       : {
             Label          : 'Mitigations',
             CollectionPath : 'Mitigations',

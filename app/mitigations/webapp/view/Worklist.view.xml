@@ -3,7 +3,7 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:semantic="sap.f.semantic">
 
-	<semantic:SemanticPage id="page" headerPinnable="false" toggleHeaderOnTitleClick="false">
+	<semantic:SemanticPage id="page" headerPinnable="false" toggleHeaderOnTitleClick="false" showFooter="true">
 
 		<semantic:titleHeading>
 			<Title text="{i18n>worklistTitle}" />
@@ -12,22 +12,36 @@
 		<semantic:content>
 			<Table id="table" width="auto" items="{
 					path: '/Mitigations',
+					parameters: {
+						$count: true,
+						$$updateGroupId : 'peopleGroup'
+					},
 					sorter: {
 						path: 'ID',
 						descending: false
 					}
-				}" noDataText="{worklistView>/tableNoDataText}" growing="true" growingScrollToLoad="true" updateFinished=".onUpdateFinished">
+				}" noDataText="{worklistView>/tableNoDataText}" mode="SingleSelectLeft" growing="true" growingScrollToLoad="true" updateFinished=".onUpdateFinished">
 
 				<headerToolbar>
 					<Toolbar>
 						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}"/>
 						<ToolbarSpacer />
-                        <Button id="ID_ADD_BUTTON" text="Add" press="onPressAdd"/>
-						<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search=".onSearch" width="auto">
-						</SearchField>
+						<Button id="ID_ADD_BUTTON" text="Add From Dialog" press="onPressAdd" visible="false"/>
+						<Button id="addUserButton" icon="sap-icon://add" tooltip="{i18n>createButtonText}" press=".onCreate">
+							<layoutData>
+								<OverflowToolbarLayoutData priority="NeverOverflow"/>
+							</layoutData>
+						</Button>
+						<Button id="deleteUserButton" icon="sap-icon://delete" tooltip="{i18n>deleteButtonText}" press=".onDelete">
+							<layoutData>
+								<OverflowToolbarLayoutData priority="NeverOverflow"/>
+							</layoutData>
+						</Button>
+						<Button id="refreshUsersButton" icon="sap-icon://refresh" enabled="{= !${appView>/hasUIChanges}}" tooltip="{i18n>refreshButtonText}" press=".onRefresh"/>
+						<Button id="sortUsersButton" icon="sap-icon://sort" enabled="{= !${appView>/hasUIChanges}}" tooltip="{i18n>sortButtonText}" press=".onSort"/>
+						<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search=".onSearch" width="auto"/>
 					</Toolbar>
 				</headerToolbar>
-
 				<columns>
 					<Column id="DescriptionColumn">
 						<Text text="Description" id="DescriptionColumnTitle"/>
@@ -43,18 +57,18 @@
 				<items>
 					<ColumnListItem type="Navigation" press=".onPress">
 						<cells>
-							<ObjectIdentifier text="{description}" />
-							<Text text="{owner}" />
-							<Text text="{timeline}" />
+							<Input value="{description}" />
+							<Input value="{owner}" />
+							<Input value="{timeline}" />
 						</cells>
 					</ColumnListItem>
 				</items>
 			</Table>
 		</semantic:content>
 
-		<semantic:sendEmailAction>
-			<semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
-		</semantic:sendEmailAction>
+		<semantic:footerMainAction>
+			<semantic:FooterMainAction text="Save" press="onSave"/>
+		</semantic:footerMainAction>
 
 
 	</semantic:SemanticPage>
