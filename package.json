@@ -6,19 +6,24 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@sap/cds": "^5",
-    "@sap/cds-odata-v2-adapter-proxy": "^1.7.4",
+    "@sap-cloud-sdk/connectivity": "^2.5.0",
+    "@sap-cloud-sdk/http-client": "^2.5.0",
+    "@sap-cloud-sdk/odata-v2": "^2.5.0",
+    "@sap-cloud-sdk/odata-v4": "^2.5.0",
+    "@sap/cds": ">=5",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.9.0",
     "@sap/hana-client": "^2.8.22",
-    "@sap/xsenv": "^3.1.0",
-    "@sap/xssec": "^3.2.2",
+    "@sap/xsenv": "^3.3.2",
+    "@sap/xssec": "^3.2.13",
     "express": "^4",
     "generator-easy-ui5": "^3.0.1",
-    "hdb": "^0.18.3",
+    "hdb": "^0.19.0",
     "passport": "^0.4.1"
   },
   "devDependencies": {
-    "@sap/ux-specification": "^1.90.2",
-    "sqlite3": "^5.0.2"
+    "@sap-cloud-sdk/generator": "^2.5.0",
+    "@sap/ux-specification": "^1.102.1",
+    "sqlite3": "^5.0.4"
   },
   "engines": {
     "node": ">=14"

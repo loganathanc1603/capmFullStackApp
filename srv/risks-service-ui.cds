@@ -6,7 +6,7 @@ annotate RiskService.Risks with {
     descr  @title : 'Description';
     miti   @title : 'Mitigation';
     impact @title : 'Impact';
-}
+};
 
 annotate RiskService.Mitigations with {
     ID          @(
@@ -17,7 +17,8 @@ annotate RiskService.Mitigations with {
     owner       @title : 'Owner';
     timeline    @title : 'Timeline';
     risks       @title : 'Risks';
-}
+};
+
 
 annotate RiskService.Risks with @(UI : {
     HeaderInfo       : {

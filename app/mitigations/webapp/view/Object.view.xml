@@ -1,38 +1,82 @@
-<mvc:View
-    controllerName="ns.mitigations.controller.Object"
+<mvc:View controllerName="ns.mitigations.controller.Object"
     xmlns="sap.m"
     xmlns:l="sap.ui.layout"
     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:smartForm="sap.ui.comp.smartform"
+    xmlns:smartField="sap.ui.comp.smartfield"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
     xmlns:semantic="sap.f.semantic">
 
-    <semantic:SemanticPage
-        id="page"
-        headerPinnable="false"
-        toggleHeaderOnTitleClick="false"
-        busy="{objectView>/busy}"
-        busyIndicatorDelay="{objectView>/delay}">
+    <semantic:SemanticPage id="idObjectPage" headerPinnable="false" showFooter="{objectView>/IsFooterVisible}"
+    toggleHeaderOnTitleClick="false" busy="{objectView>/busy}" busyIndicatorDelay="{objectView>/delay}">
 
         <semantic:titleHeading>
-            <Title text="{description}" />
+            <Title text="{title}"/>
         </semantic:titleHeading>
 
         <semantic:headerContent>
-            <ObjectNumber number="{ID}"           />
+            <ObjectNumber number="{descr}"/>
         </semantic:headerContent>
 
-        <semantic:sendEmailAction>
-            <semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
-        </semantic:sendEmailAction>
-
         <semantic:content>
-            <l:VerticalLayout>
-                <ObjectStatus title="Description" text="{description}"/>
-                <ObjectStatus title="Owner" text="{owner}"/>
-                <ObjectStatus title="Timeline" text="{timeline}"/>
-            </l:VerticalLayout>
+            <smartForm:SmartForm id="idSmartFormRisks" editable="{objectView>/IsEditable}"  title="Main">
+                <smartForm:layout>
+                    <!-- <smartForm:ColumnLayout columnsM="2" columnsL="3" columnsXL="4"/> -->
+                </smartForm:layout>
+                <smartForm:Group label="Basic Information">
+                    <smartForm:GroupElement>
+                        <smartField:SmartField value="{ID}"/>
+                    </smartForm:GroupElement>
+                    <smartForm:GroupElement>
+                        <smartField:SmartField value="{title}" change="onChangeSmartField"/>
+                    </smartForm:GroupElement>
+                    <smartForm:GroupElement>
+                        <smartField:SmartField value="{descr}" change="onChangeSmartField"/>
+                    </smartForm:GroupElement>
+                    <smartForm:GroupElement>
+                        <smartField:SmartField value="{impact}" change="onChangeSmartField"/>
+                    </smartForm:GroupElement>
+                    <smartForm:GroupElement>
+                        <smartField:SmartField value="{prio}" change="onChangeSmartField"/>
+                    </smartForm:GroupElement>
+                    <smartForm:GroupElement>
+                        <smartField:SmartField value="{miti_ID}" change="onChangeSmartField"/>
+                    </smartForm:GroupElement>
+                </smartForm:Group>
+                <smartForm:Group label="Admin Data">
+                    <smartForm:GroupElement>
+                        <smartField:SmartField value="{createdAt}"/>
+                    </smartForm:GroupElement>
+                    <smartForm:GroupElement>
+                        <smartField:SmartField value="{createdBy}"/>
+                    </smartForm:GroupElement>
+                    <smartForm:GroupElement>
+                        <smartField:SmartField value="{modifiedAt}"/>
+                    </smartForm:GroupElement>
+                    <smartForm:GroupElement>
+                        <smartField:SmartField value="{modifiedBy}"/>
+                    </smartForm:GroupElement>
+                </smartForm:Group>
+            </smartForm:SmartForm>
         </semantic:content>
+        <semantic:draftIndicator>
+            <DraftIndicator id="idDraftIndicator" state="Clear"></DraftIndicator>
+		</semantic:draftIndicator>
+        	<!-- Semantic Footer Buttons -->
+		<semantic:footerMainAction>
+			<semantic:FooterMainAction text="Create" press="onCreateRisks"/>
+		</semantic:footerMainAction>
 
+		<semantic:footerCustomActions>
+			<Button id="cancelAction" text="Cancel" press="onCancelRisks"/>
+		</semantic:footerCustomActions>
 
+        <semantic:editAction>
+			<semantic:EditAction press="onEditRisks" visible="{objectView>/IsEditButtonVisible}"/>
+		</semantic:editAction>
+        <semantic:deleteAction>
+			<semantic:DeleteAction press="onDeleteRisks" visible="{objectView>/IsDeleteButtonVisible}"/>
+		</semantic:deleteAction>
     </semantic:SemanticPage>
-
 </mvc:View>

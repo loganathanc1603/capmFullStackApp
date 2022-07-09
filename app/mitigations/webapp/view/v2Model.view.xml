@@ -1,0 +1,50 @@
+<mvc:View controllerName="ns.mitigations.controller.v2Model"
+  xmlns="sap.m"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:semantic="sap.f.semantic"
+  xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+  xmlns:smartTable="sap.ui.comp.smarttable"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+  <semantic:SemanticPage id="idRisksPage" headerPinnable="false" toggleHeaderOnTitleClick="false">
+
+    <semantic:titleHeading>
+      <Title id="idTitle" text="{i18n>v2ModelTitle}" level="H2" wrapping="true" />
+    </semantic:titleHeading>
+    <semantic:headerContent>
+      <smartFilterBar:SmartFilterBar id="idSmartFilterBarRisks" entitySet="Risks" 
+      persistencyKey="ns.ui5eventregistration.Risks.filterbar" enableBasicSearch="true">
+        <!-- layout data used to make the table growing but the filter bar fixed -->
+        <smartFilterBar:layoutData>
+          <FlexItemData id="idFlexItemData1" shrinkFactor="0"/>
+        </smartFilterBar:layoutData>
+      </smartFilterBar:SmartFilterBar>
+    </semantic:headerContent>
+    <semantic:content>
+      <smartTable:SmartTable id="LineItemsSmartTable" entitySet="Risks" 
+      smartFilterId="idSmartFilterBarRisks" tableType="ResponsiveTable" 
+      useExportToExcel="true" beforeExport="onBeforeExport" 
+      useVariantManagement="false" useTablePersonalisation="true"
+      requestAtLeastFields="HasDraftEntity"
+      header="Risk Items" showRowCount="true" persistencyKey="ns.ui5eventregistration.Risks.table" beforeRebindTable="onBeforeRebindTableRisks"
+      enableAutoBinding="true" class="sapUiResponsiveContentPadding" editTogglable="false" app:useSmartToggle="false">
+        <!-- layout data used to make the table growing but the filter bar fixed -->
+        <smartTable:layoutData>
+          <FlexItemData id="idFlexItemData2" growFactor="1" baseSize="0%"/>
+        </smartTable:layoutData>
+        <smartTable:customToolbar>
+          <OverflowToolbar >
+            <content>
+              <ToolbarSpacer></ToolbarSpacer>
+              <Button text="{i18n>RiskCreate}" type="Default" press="onPressRiskCreatePage" ></Button>
+              <Button text="{i18n>RiskDelete}" type="Default" press="onPressRiskDelete" ></Button>
+            </content>
+          </OverflowToolbar>
+        </smartTable:customToolbar>
+        <Table sticky="ColumnHeaders,HeaderToolbar" mode="None" selectionChange="onSelectionChangeRiskTable">
+          <ColumnListItem highlight="{parts: [{path: 'IsActiveEntity'}, {path: 'HasDraftEntity'}], formatter:'.formatRowHighlight'}" type="Navigation" press="onNavigationRisks"/>
+        </Table>
+      </smartTable:SmartTable>
+    </semantic:content>
+  </semantic:SemanticPage>
+</mvc:View>

@@ -2,8 +2,11 @@ sap.ui.define([
 	"./BaseController",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/routing/History",
-	"../model/formatter"
-], function (BaseController, JSONModel, History, formatter) {
+	"../model/formatter",
+	"sap/m/MessageBox",
+	"sap/ui/core/Fragment",
+	"sap/m/MessageToast"
+], function (BaseController, JSONModel, History, formatter, MessageBox, Fragment, MessageToast) {
 	"use strict";
 
 	return BaseController.extend("ns.mitigations.controller.Object", {
@@ -18,16 +21,20 @@ sap.ui.define([
 		 * Called when the worklist controller is instantiated.
 		 * @public
 		 */
-		onInit : function () {
+		onInit: function () {
 			// Model used to manipulate control states. The chosen values make sure,
 			// detail page shows busy indication immediately so there is no break in
 			// between the busy indication for loading the view's meta data
-			var oViewModel = new JSONModel({
-					busy : true,
-					delay : 0
-				});
+			this.objectViewModel = new JSONModel({
+				busy: true,
+				delay: 0,
+				IsFooterVisible: false,
+				IsEditable: false,
+				IsEditButtonVisible: true,
+				IsDeleteButtonVisible: true
+			});
 			this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
-			this.setModel(oViewModel, "objectView");
+			this.setModel(this.objectViewModel, "objectView");
 		},
 		/* =========================================================== */
 		/* event handlers                                              */
@@ -40,7 +47,7 @@ sap.ui.define([
 		 * If not, it will replace the current entry of the browser history with the worklist route.
 		 * @public
 		 */
-		onNavBack : function() {
+		onNavBack: function () {
 			var sPreviousHash = History.getInstance().getPreviousHash();
 			if (sPreviousHash !== undefined) {
 				// eslint-disable-next-line sap-no-history-manipulation
@@ -60,9 +67,12 @@ sap.ui.define([
 		 * @param {sap.ui.base.Event} oEvent pattern match event in route 'object'
 		 * @private
 		 */
-		_onObjectMatched : function (oEvent) {
-			var sObjectId =  oEvent.getParameter("arguments").objectId;
-			this._bindView("/Mitigations" + sObjectId);
+		_onObjectMatched: function (oEvent) {
+			this.oDataV2Model = this.getOwnerComponent().getModel("v2");
+			this.getView().setModel(this.oDataV2Model);
+
+			this.oContextPath = oEvent.getParameter("arguments").riskId;
+			this._bindView("/" + this.oContextPath);
 		},
 
 		/**
@@ -71,47 +81,122 @@ sap.ui.define([
 		 * @param {string} sObjectPath path to the object to be bound
 		 * @private
 		 */
-		_bindView : function (sObjectPath) {
-			var oViewModel = this.getModel("objectView");
-
+		_bindView: function (sObjectPath) {
 			this.getView().bindElement({
 				path: sObjectPath,
 				events: {
-					change: this._onBindingChange.bind(this),
 					dataRequested: function () {
-						oViewModel.setProperty("/busy", true);
-					},
-					dataReceived: function () {
-						oViewModel.setProperty("/busy", false);
-					}
+						this.objectViewModel.setProperty("/busy", true);
+					}.bind(this),
+					dataReceived: function (oData) {
+						let IsActiveEntity = oData.getParameter("data").IsActiveEntity;
+						this.objectViewModel.setProperty("/IsFooterVisible", !IsActiveEntity);
+						this.objectViewModel.setProperty("/IsEditable", !IsActiveEntity);
+
+						this.objectViewModel.setProperty("/IsEditButtonVisible", IsActiveEntity);
+						this.objectViewModel.setProperty("/IsDeleteButtonVisible", IsActiveEntity);
+						this.objectViewModel.setProperty("/busy", false);
+					}.bind(this)
 				}
 			});
 		},
 
-		_onBindingChange : function () {
-			var oView = this.getView(),
-				oViewModel = this.getModel("objectView"),
-				oElementBinding = oView.getElementBinding();
-
-			// No data for the binding
-			if (!oElementBinding.getBoundContext()) {
-				this.getRouter().getTargets().display("objectNotFound");
-				return;
+		onChangeSmartField: function (oEvent) {
+			let hasPendingChanges = this.oDataV2Model.hasPendingChanges();
+			this.getView().byId("idDraftIndicator").setState("Saving");
+			if (hasPendingChanges) {
+				this.oDataV2Model.submitChanges({
+					success: function (oData) {
+						this.getView().byId("idDraftIndicator").setState("Saved");
+					}.bind(this),
+					error: function (oError) { }
+				});
 			}
+		},
 
-			var oResourceBundle = this.getResourceBundle();
+		onCreateRisks: function () {
+			this.objectViewModel.setProperty("/busy", true);
+			let sPath = this.getView().getBindingContext().getPath() + "/RiskService.draftActivate";
+			this.oDataV2Model.create(sPath, {}, {
+				success: function (oData) {
+					let sPath = this._createBindingKey(oData);
+					this.objectViewModel.setProperty("/busy", false);
+					MessageBox.success("The Data Created Successfully.", {
+						title: "Success"
+					});
+					this._bindView(sPath);
+				}.bind(this),
+				error: function (oError) {
+					this.objectViewModel.setProperty("/busy", false);
+				}.bind(this)
+			});
+		},
 
-			oView.getBindingContext().requestObject().then((function (oObject) {
-				var sObjectId = oObject.ID,
-					sObjectName = oObject.ID;
+		onEditRisks: function () {
+			this.objectViewModel.setProperty("/busy", true);
+			let sPath = this.getView().getBindingContext().getPath() + "/RiskService.draftEdit";
+			let oPayload = {
+				"PreserveChanges": true
+			};
+			this.objectViewModel.setProperty("/busy", true);
+			this.oDataV2Model.create(sPath, oPayload, {
+				success: function (oData) {
+					let sPath = this._createBindingKey(oData);
+					this.objectViewModel.setProperty("/busy", false);
+					this._bindView(sPath);
+				}.bind(this),
+				error: function (oError) {
+					this.objectViewModel.setProperty("/busy", false);
+				}.bind(this)
+			});
+		},
 
+		onDeleteRisks: function () {
+			this.objectViewModel.setProperty("/busy", true);
+			let sPath = this.getView().getBindingContext().getPath();
+			this.oDataV2Model.remove(sPath, {
+				success: function (oData) {
+					this.objectViewModel.setProperty("/busy", false);
+					MessageToast.show("The record deleted successfully.", {
+						duration: 5000,
+					})
+					this.getRouter().navTo("v2Model", {});
+				}.bind(this),
+				error: function () {
+					this.objectViewModel.setProperty("/busy", false);
+				}.bind(this)
+			})
+		},
 
-				oViewModel.setProperty("/busy", false);
-				oViewModel.setProperty("/shareSendEmailSubject",
-					oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
-				oViewModel.setProperty("/shareSendEmailMessage",
-					oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
-			}).bind(this));
+		onCancelRisks: function (oEvent) {
+			var oButton = oEvent.getSource(),
+				oView = this.getView();
+
+			if (!this._pdraftCancelPopover) {
+				this._pdraftCancelPopover = Fragment.load({
+					id: oView.getId(),
+					name: "ns.mitigations.fragments.draftCancelPopover",
+					controller: this
+				}).then(function (oPopover) {
+					oView.addDependent(oPopover);
+					return oPopover;
+				});
+			}
+			this._pdraftCancelPopover.then(function (oPopover) {
+				oPopover.openBy(oButton);
+			});
+		},
+
+		onPressDiscard: function () {
+			this.onDeleteRisks();
+		},
+
+		_createBindingKey: function (oData) {
+			let sPath = this.oDataV2Model.createKey("/Risks", {
+				ID: oData.ID,
+				IsActiveEntity: oData.IsActiveEntity
+			});
+			return sPath;
 		}
 
 	});

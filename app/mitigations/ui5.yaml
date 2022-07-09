@@ -9,7 +9,7 @@ server:
     mountPath: /service/risk
     afterMiddleware: compression
     configuration:
-      baseUri: http://localhost:4004/service/risk
+      baseUri: http://localhost:4004/v2/service/risk
   - name: ui5-middleware-livereload
     afterMiddleware: compression
     configuration:

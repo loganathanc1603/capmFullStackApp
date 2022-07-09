@@ -10,6 +10,13 @@
       "csrfProtection": false
     },
     {
+      "source": "^/v2/service/(.*)$",
+      "target": "/v2/service/$1",
+      "destination": "cpapp-app-srv",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
+    {
       "source": "^/resources/(.*)$",
       "target": "/resources/$1",
       "authenticationType": "none",
