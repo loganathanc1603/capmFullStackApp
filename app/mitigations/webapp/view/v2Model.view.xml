@@ -13,7 +13,7 @@
     </semantic:titleHeading>
     <semantic:headerContent>
       <smartFilterBar:SmartFilterBar id="idSmartFilterBarRisks" entitySet="Risks" 
-      persistencyKey="ns.ui5eventregistration.Risks.filterbar" enableBasicSearch="true">
+      persistencyKey="ns.mitigations.Risks.filterbar" enableBasicSearch="true">
         <!-- layout data used to make the table growing but the filter bar fixed -->
         <smartFilterBar:layoutData>
           <FlexItemData id="idFlexItemData1" shrinkFactor="0"/>
@@ -21,12 +21,12 @@
       </smartFilterBar:SmartFilterBar>
     </semantic:headerContent>
     <semantic:content>
-      <smartTable:SmartTable id="LineItemsSmartTable" entitySet="Risks" 
+      <smartTable:SmartTable id="idSmartTableRisks" entitySet="Risks" 
       smartFilterId="idSmartFilterBarRisks" tableType="ResponsiveTable" 
       useExportToExcel="true" beforeExport="onBeforeExport" 
       useVariantManagement="false" useTablePersonalisation="true"
       requestAtLeastFields="HasDraftEntity"
-      header="Risk Items" showRowCount="true" persistencyKey="ns.ui5eventregistration.Risks.table" beforeRebindTable="onBeforeRebindTableRisks"
+      header="Items" showRowCount="true" persistencyKey="ns.mitigations.Risks.table" beforeRebindTable="onBeforeRebindTableRisks"
       enableAutoBinding="true" class="sapUiResponsiveContentPadding" editTogglable="false" app:useSmartToggle="false">
         <!-- layout data used to make the table growing but the filter bar fixed -->
         <smartTable:layoutData>
@@ -41,7 +41,7 @@
             </content>
           </OverflowToolbar>
         </smartTable:customToolbar>
-        <Table sticky="ColumnHeaders,HeaderToolbar" mode="None" selectionChange="onSelectionChangeRiskTable">
+        <Table sticky="ColumnHeaders,HeaderToolbar" mode="MultiSelect" >
           <ColumnListItem highlight="{parts: [{path: 'IsActiveEntity'}, {path: 'HasDraftEntity'}], formatter:'.formatRowHighlight'}" type="Navigation" press="onNavigationRisks"/>
         </Table>
       </smartTable:SmartTable>

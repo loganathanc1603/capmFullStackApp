@@ -5,7 +5,7 @@
                 "strategy": "mock",
                 "users": {
                     "risk.viewer@tester.sap.com": {
-                        "password": "initial",
+                        "password": "123",
                         "ID": "logu_c@live.com",
                         "userAttributes": {
                             "email": "logu_c@live.com"
@@ -15,7 +15,7 @@
                         ]
                     },
                     "risk.manager@tester.sap.com": {
-                        "password": "initial",
+                        "password": "123",
                         "ID": "logu_c@live.com",
                         "userAttributes": {
                             "email": "logu_c@live.com"

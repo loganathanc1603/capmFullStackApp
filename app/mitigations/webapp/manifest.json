@@ -13,14 +13,6 @@
     "resources": "resources.json",
     "dataSources": {
       "mainService": {
-        "uri": "/service/risk/",
-        "type": "OData",
-        "settings": {
-          "odataVersion": "4.0",
-          "localUri": "localService/metadata.xml"
-        }
-      },
-      "v2": {
         "uri": "/v2/service/risk/",
         "type": "OData",
         "settings": {
@@ -99,16 +91,6 @@
         "dataSource": "mainService",
         "preload": true,
         "settings": {
-          "operationMode": "Server",
-          "groupId": "$auto",
-          "synchronizationMode": "None",
-          "autoExpandSelect": true
-        }
-      },
-      "v2": {
-        "dataSource": "v2",
-        "preload": true,
-        "settings": {
           "synchronizationMode": "None",
           "operationMode": "Server",
           "autoExpandSelect": true,
@@ -125,7 +107,9 @@
         "controlId": "app",
         "controlAggregation": "pages",
         "bypassed": {
-          "target": ["notFound"]
+          "target": [
+            "notFound"
+          ]
         },
         "async": true
       },
@@ -133,17 +117,30 @@
         {
           "pattern": "",
           "name": "v2Model",
-          "target": ["v2Model"]
+          "target": [
+            "v2Model"
+          ]
         },
         {
           "pattern": "worklist",
           "name": "worklist",
-          "target": ["worklist"]
+          "target": [
+            "worklist"
+          ]
         },
         {
           "pattern": "Risks/{riskId}",
           "name": "object",
-          "target": ["object"]
+          "target": [
+            "object"
+          ]
+        },
+        {
+          "name": "NestedObject",
+          "pattern": "RouteNestedObject/{RiskPath}/{AffectUserPath}",
+          "target": [
+            "TargetNestedObject"
+          ]
         }
       ],
       "targets": {
@@ -172,6 +169,11 @@
         "notFound": {
           "viewName": "NotFound",
           "viewId": "notFound"
+        },
+        "TargetNestedObject": {
+          "viewType": "XML",
+          "viewId": "NestedObject",
+          "viewName": "NestedObject"
         }
       }
     }

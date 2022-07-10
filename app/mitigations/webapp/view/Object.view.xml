@@ -4,79 +4,102 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:smartForm="sap.ui.comp.smartform"
     xmlns:smartField="sap.ui.comp.smartfield"
+    xmlns:smartTable="sap.ui.comp.smarttable"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
     xmlns:semantic="sap.f.semantic">
 
-    <semantic:SemanticPage id="idObjectPage" headerPinnable="false" showFooter="{objectView>/IsFooterVisible}"
-    toggleHeaderOnTitleClick="false" busy="{objectView>/busy}" busyIndicatorDelay="{objectView>/delay}">
+    <semantic:SemanticPage id="idObjectPage" headerPinnable="false" showFooter="{objectView>/IsFooterVisible}" toggleHeaderOnTitleClick="false" busy="{objectView>/busy}" busyIndicatorDelay="{objectView>/delay}">
 
         <semantic:titleHeading>
-            <Title text="{title}"/>
+            <Title text="{path:'title',formatter:'.setDefaultTitle'}"/>
         </semantic:titleHeading>
 
         <semantic:headerContent>
-            <ObjectNumber number="{descr}"/>
+            <ObjectNumber number="{path:'descr',formatter:'.setDefaultTitle'}"/>
         </semantic:headerContent>
 
         <semantic:content>
-            <smartForm:SmartForm id="idSmartFormRisks" editable="{objectView>/IsEditable}"  title="Main">
-                <smartForm:layout>
-                    <!-- <smartForm:ColumnLayout columnsM="2" columnsL="3" columnsXL="4"/> -->
-                </smartForm:layout>
-                <smartForm:Group label="Basic Information">
-                    <smartForm:GroupElement>
-                        <smartField:SmartField value="{ID}"/>
-                    </smartForm:GroupElement>
-                    <smartForm:GroupElement>
-                        <smartField:SmartField value="{title}" change="onChangeSmartField"/>
-                    </smartForm:GroupElement>
-                    <smartForm:GroupElement>
-                        <smartField:SmartField value="{descr}" change="onChangeSmartField"/>
-                    </smartForm:GroupElement>
-                    <smartForm:GroupElement>
-                        <smartField:SmartField value="{impact}" change="onChangeSmartField"/>
-                    </smartForm:GroupElement>
-                    <smartForm:GroupElement>
-                        <smartField:SmartField value="{prio}" change="onChangeSmartField"/>
-                    </smartForm:GroupElement>
-                    <smartForm:GroupElement>
-                        <smartField:SmartField value="{miti_ID}" change="onChangeSmartField"/>
-                    </smartForm:GroupElement>
-                </smartForm:Group>
-                <smartForm:Group label="Admin Data">
-                    <smartForm:GroupElement>
-                        <smartField:SmartField value="{createdAt}"/>
-                    </smartForm:GroupElement>
-                    <smartForm:GroupElement>
-                        <smartField:SmartField value="{createdBy}"/>
-                    </smartForm:GroupElement>
-                    <smartForm:GroupElement>
-                        <smartField:SmartField value="{modifiedAt}"/>
-                    </smartForm:GroupElement>
-                    <smartForm:GroupElement>
-                        <smartField:SmartField value="{modifiedBy}"/>
-                    </smartForm:GroupElement>
-                </smartForm:Group>
-            </smartForm:SmartForm>
+            <IconTabBar id="idRiskIconTabBar" expanded="{device>/isNoPhone}" selectedKey="OVERVIEW" select="onSelectIconTabBar" class="sapUiResponsiveContentPadding">
+                <items>
+                    <IconTabFilter icon="sap-icon://detail-view" key="OVERVIEW" text="Risk Overview">
+                        <smartForm:SmartForm id="idSmartFormRisks" editable="{objectView>/IsEditable}">
+                            <smartForm:layout>
+                                <!-- <smartForm:ColumnLayout columnsM="2" columnsL="3" columnsXL="4"/> -->
+                            </smartForm:layout>
+                            <smartForm:Group label="Basic Information">
+                                <smartForm:GroupElement>
+                                    <smartField:SmartField value="{title}" change="onChangeSmartField"/>
+                                </smartForm:GroupElement>
+                                <smartForm:GroupElement>
+                                    <smartField:SmartField value="{descr}" change="onChangeSmartField"/>
+                                </smartForm:GroupElement>
+                                <smartForm:GroupElement>
+                                    <smartField:SmartField value="{impact}" change="onChangeSmartField"/>
+                                </smartForm:GroupElement>
+                                <smartForm:GroupElement>
+                                    <smartField:SmartField value="{prio}" change="onChangeSmartField"/>
+                                </smartForm:GroupElement>
+                                <smartForm:GroupElement>
+                                    <smartField:SmartField value="{miti_ID}" change="onChangeSmartField"/>
+                                </smartForm:GroupElement>
+                            </smartForm:Group>
+                            <smartForm:Group label="Admin Data">
+                                <smartForm:GroupElement>
+                                    <smartField:SmartField value="{createdAt}"/>
+                                </smartForm:GroupElement>
+                                <smartForm:GroupElement>
+                                    <smartField:SmartField value="{createdBy}"/>
+                                </smartForm:GroupElement>
+                                <smartForm:GroupElement>
+                                    <smartField:SmartField value="{modifiedAt}"/>
+                                </smartForm:GroupElement>
+                                <smartForm:GroupElement>
+                                    <smartField:SmartField value="{modifiedBy}"/>
+                                </smartForm:GroupElement>
+                            </smartForm:Group>
+                        </smartForm:SmartForm>
+                    </IconTabFilter>
+                    <IconTabFilter text="Affected Users" key="AFFUSER" icon="sap-icon://validate" iconColor="Negative">
+                        <smartTable:SmartTable id="idAffectedUsersSmatTable" entitySet="AffectedUsers" tableType="ResponsiveTable" tableBindingPath="AffectedUsers" useExportToExcel="true" beforeExport="onBeforeExport" useVariantManagement="false" useTablePersonalisation="true" requestAtLeastFields="HasDraftEntity" header="Items" showRowCount="true" persistencyKey="ns.mitigations.AffectedUsers.table" beforeRebindTable="onBeforeRebindTableAffectedUsers" enableAutoBinding="true" class="sapUiResponsiveContentPadding">
+                            <!-- layout data used to make the table growing but the filter bar fixed -->
+                            <smartTable:layoutData>
+                                <FlexItemData id="idFlexItemData2" growFactor="1" baseSize="0%"/>
+                            </smartTable:layoutData>
+                            <smartTable:customToolbar>
+                                <OverflowToolbar >
+                                    <content>
+                                        <ToolbarSpacer></ToolbarSpacer>
+                                        <Button text="{i18n>RiskCreate}" type="Default" visible="{objectView>/IsFooterVisible}" press="onPressAffectedUserCreatePage"></Button>
+                                        <Button text="{i18n>RiskDelete}" type="Default" visible="{objectView>/IsFooterVisible}" press="onPressAffectedUserDelete"></Button>
+                                    </content>
+                                </OverflowToolbar>
+                            </smartTable:customToolbar>
+                            <Table sticky="ColumnHeaders,HeaderToolbar">
+                                <ColumnListItem highlight="{parts: [{path: 'IsActiveEntity'}, {path: 'HasDraftEntity'}], formatter:'.formatRowHighlight'}" type="Navigation" press="onNavigationAffectedUser"/>
+                            </Table>
+                        </smartTable:SmartTable>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
         </semantic:content>
         <semantic:draftIndicator>
             <DraftIndicator id="idDraftIndicator" state="Clear"></DraftIndicator>
-		</semantic:draftIndicator>
-        	<!-- Semantic Footer Buttons -->
-		<semantic:footerMainAction>
-			<semantic:FooterMainAction text="Create" press="onCreateRisks"/>
-		</semantic:footerMainAction>
+        </semantic:draftIndicator>
+        <!-- Semantic Footer Buttons -->
+        <semantic:footerMainAction>
+            <semantic:FooterMainAction text="Create" press="onCreateRisks"/>
+        </semantic:footerMainAction>
 
-		<semantic:footerCustomActions>
-			<Button id="cancelAction" text="Cancel" press="onCancelRisks"/>
-		</semantic:footerCustomActions>
+        <semantic:footerCustomActions>
+            <Button id="cancelAction" text="Cancel" press="onCancelRisks"/>
+        </semantic:footerCustomActions>
 
         <semantic:editAction>
-			<semantic:EditAction press="onEditRisks" visible="{objectView>/IsEditButtonVisible}"/>
-		</semantic:editAction>
+            <semantic:EditAction press="onEditRisks" visible="{objectView>/IsEditButtonVisible}"/>
+        </semantic:editAction>
         <semantic:deleteAction>
-			<semantic:DeleteAction press="onDeleteRisks" visible="{objectView>/IsDeleteButtonVisible}"/>
-		</semantic:deleteAction>
+            <semantic:DeleteAction press="onDeleteRisks" visible="{objectView>/IsDeleteButtonVisible}"/>
+        </semantic:deleteAction>
     </semantic:SemanticPage>
 </mvc:View>

@@ -9,8 +9,8 @@ sap.ui.define([
         return BaseController.extend("ns.mitigations.controller.v2Model", {
 
             onInit: function () {
-                this.oDataV2Model = this.getOwnerComponent().getModel("v2");
-                this.getView().setModel(this.oDataV2Model);
+                this.oDataV2Model = this.getOwnerComponent().getModel();
+             //   this.getView().setModel(this.oDataV2Model);
             },
 
             onBeforeRebindTableRisks: function (oEvent) {
@@ -45,6 +45,29 @@ sap.ui.define([
                 this._onNavToObject(sPath);
             },
 
+            onPressRiskDelete: function(){
+                let oSelectedItems = this._getRisksTable().getTable().getSelectedContextPaths();
+                if (oSelectedItems.length > 0) {
+                    oSelectedItems.forEach((oValue) => {
+                        this.oDataV2Model.remove(oValue, {
+                            success: (() => { }),
+                            error: (() => { }) 
+                        })
+                    });
+    
+                    this.oDataV2Model.submitChanges({
+                        success: (() => {
+                            sap.m.MessageToast.show("Item deleted successfully.");
+                        }),
+                        error: (() => {
+                            sap.m.MessageToast.show("Item deletion failed.");
+                        })
+                    })
+                } else {
+                    sap.m.MessageToast.show("Please select atlest one item to delete.");
+                }
+            },
+
             _onNavToObject: function (sPath) {
                 this.getRouter().navTo("object", {
                     riskId: sPath
@@ -59,6 +82,10 @@ sap.ui.define([
                 } else {
                     return "None";
                 }
+            },
+
+            _getRisksTable: function(){
+                return this.getView().byId("idSmartTableRisks");
             }
 
         });

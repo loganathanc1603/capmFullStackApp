@@ -5,8 +5,10 @@ sap.ui.define([
 	"../model/formatter",
 	"sap/m/MessageBox",
 	"sap/ui/core/Fragment",
-	"sap/m/MessageToast"
-], function (BaseController, JSONModel, History, formatter, MessageBox, Fragment, MessageToast) {
+	"sap/m/MessageToast",
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator"
+], function (BaseController, JSONModel, History, formatter, MessageBox, Fragment, MessageToast, Filter, FilterOperator) {
 	"use strict";
 
 	return BaseController.extend("ns.mitigations.controller.Object", {
@@ -68,9 +70,7 @@ sap.ui.define([
 		 * @private
 		 */
 		_onObjectMatched: function (oEvent) {
-			this.oDataV2Model = this.getOwnerComponent().getModel("v2");
-			this.getView().setModel(this.oDataV2Model);
-
+			this.oDataV2Model = this.getOwnerComponent().getModel();
 			this.oContextPath = oEvent.getParameter("arguments").riskId;
 			this._bindView("/" + this.oContextPath);
 		},
@@ -82,6 +82,7 @@ sap.ui.define([
 		 * @private
 		 */
 		_bindView: function (sObjectPath) {
+			this.oDataV2Model.invalidateEntry(sObjectPath);
 			this.getView().bindElement({
 				path: sObjectPath,
 				events: {
@@ -89,13 +90,20 @@ sap.ui.define([
 						this.objectViewModel.setProperty("/busy", true);
 					}.bind(this),
 					dataReceived: function (oData) {
-						let IsActiveEntity = oData.getParameter("data").IsActiveEntity;
-						this.objectViewModel.setProperty("/IsFooterVisible", !IsActiveEntity);
-						this.objectViewModel.setProperty("/IsEditable", !IsActiveEntity);
-
-						this.objectViewModel.setProperty("/IsEditButtonVisible", IsActiveEntity);
-						this.objectViewModel.setProperty("/IsDeleteButtonVisible", IsActiveEntity);
 						this.objectViewModel.setProperty("/busy", false);
+						if (oData.getParameter("data")) {
+							let IsActiveEntity = oData.getParameter("data").IsActiveEntity;
+							this.objectViewModel.setProperty("/IsFooterVisible", !IsActiveEntity);
+							this.objectViewModel.setProperty("/IsEditable", !IsActiveEntity);
+
+							this.objectViewModel.setProperty("/IsEditButtonVisible", IsActiveEntity);
+							this.objectViewModel.setProperty("/IsDeleteButtonVisible", IsActiveEntity);
+							if (this._getAffctedUserTable().isInitialised()) {
+								this._getAffctedUserTable().rebindTable();
+							}
+						} else {
+							this.getRouter().navTo("v2Model", {}, true);
+						}
 					}.bind(this)
 				}
 			});
@@ -191,12 +199,96 @@ sap.ui.define([
 			this.onDeleteRisks();
 		},
 
+		onPressAffectedUserCreatePage: function () {
+			let sPath = this.getView().getBindingContext().getPath() + "/AffectedUsers ";
+			this.oDataV2Model.create(sPath, {}, {
+				success: (oData) => {
+					let sAffPath = this.oDataV2Model.createKey("AffectedUsers", {
+						ID: oData.ID,
+						IsActiveEntity: oData.IsActiveEntity
+					});
+					this._onNavToObject(sAffPath);
+				}, error: (oError) => {
+					sap.m.MessageBox.error("Error");
+				}
+			})
+		},
+
+		_onNavToObject: function (sAffPath) {
+			let sRiskPath = this.getView().getBindingContext().getPath().slice(1);
+			this.getRouter().navTo("NestedObject", {
+				RiskPath: sRiskPath,
+				AffectUserPath: sAffPath
+			});
+		},
+
+		onSelectIconTabBar: function (oEvent) {
+			var sKey = oEvent.getSource().getSelectedKey();
+			if (sKey === "AFFUSER") {
+				this._getAffctedUserTable().rebindTable();
+			}
+		},
+
+		onBeforeRebindTableAffectedUsers: function (oEvent) { },
+
+		onPressAffectedUserDelete: function () {
+			let oSelectedItems = this._getAffctedUserTable().getTable().getSelectedContextPaths();
+			if (oSelectedItems.length > 0) {
+				oSelectedItems.forEach((oValue) => {
+					this.oDataV2Model.remove(oValue, {
+						success: (() => { }),
+						error: (() => { })
+					})
+				});
+
+				this.oDataV2Model.submitChanges({
+					success: (() => {
+						sap.m.MessageToast.show("Item deleted successfully.");
+					}),
+					error: (() => {
+						sap.m.MessageToast.show("Item deletion failed.");
+					})
+				})
+			} else {
+				sap.m.MessageToast.show("Please select atlest one item to delete.");
+			}
+		},
+
+		onNavigationAffectedUser: function (oEvent) {
+			let sPath = oEvent.getSource().getBindingContextPath().slice(1);
+			this._onNavToObject(sPath);
+		},
+
+		_getAffctedUserTable: function () {
+			return this.getView().byId("idAffectedUsersSmatTable");
+		},
+
+
+
 		_createBindingKey: function (oData) {
 			let sPath = this.oDataV2Model.createKey("/Risks", {
 				ID: oData.ID,
 				IsActiveEntity: oData.IsActiveEntity
 			});
 			return sPath;
+		},
+
+		formatRowHighlight: function (sValue1, sValue2) {
+			if (!sValue1) {
+				return "Information";
+			} else if (sValue2) {
+				return "Information";
+			} else {
+				return "None";
+			}
+		},
+
+		setDefaultTitle: function (sValue) {
+			if (!sValue) {
+				return "New Draft Value"
+			} else {
+				return sValue;
+			}
 		}
 
 	});
