@@ -25,7 +25,7 @@ entity Mitigations : managed {
 
 entity AffectedUsers : managed {
   key ID                : UUID    @(Core.Computed : true);
-      userName          : String(10)  @readonly;
+      userName          : String  @readonly;
       firstName         : String  @mandatory;
       lastName          : String;
       gender            : String;
