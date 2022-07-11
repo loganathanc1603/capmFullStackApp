@@ -10,9 +10,14 @@ sap.ui.define([
 
             onInit: function () {
                 this.oDataV2Model = this.getOwnerComponent().getModel();
-             //   this.getView().setModel(this.oDataV2Model);
+                //   this.getView().setModel(this.oDataV2Model);
             },
 
+            /**
+             *
+             *
+             * @param {*} oEvent
+             */
             onBeforeRebindTableRisks: function (oEvent) {
                 let oBindingParams = oEvent.getParameter("bindingParams"),
                     oIsDraftFilter = new Filter("IsActiveEntity", FilterOperator.EQ, false),
@@ -45,16 +50,16 @@ sap.ui.define([
                 this._onNavToObject(sPath);
             },
 
-            onPressRiskDelete: function(){
+            onPressRiskDelete: function () {
                 let oSelectedItems = this._getRisksTable().getTable().getSelectedContextPaths();
                 if (oSelectedItems.length > 0) {
                     oSelectedItems.forEach((oValue) => {
                         this.oDataV2Model.remove(oValue, {
                             success: (() => { }),
-                            error: (() => { }) 
+                            error: (() => { })
                         })
                     });
-    
+
                     this.oDataV2Model.submitChanges({
                         success: (() => {
                             sap.m.MessageToast.show("Item deleted successfully.");
@@ -83,8 +88,13 @@ sap.ui.define([
                     return "None";
                 }
             },
-
-            _getRisksTable: function(){
+            
+            /**
+             *
+             *
+             * @return {*} 
+             */
+            _getRisksTable: function () {
                 return this.getView().byId("idSmartTableRisks");
             }
 

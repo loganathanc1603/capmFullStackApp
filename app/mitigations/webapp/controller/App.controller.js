@@ -5,7 +5,7 @@ sap.ui.define([
 
 	return BaseController.extend("ns.mitigations.controller.App", {
 
-		onInit : function () {
+		onInit: function () {
 			// apply content density mode to root view
 			this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
 		}

@@ -16,4 +16,13 @@ module.exports = async (srv) => {
       }
     });
   });
+
+  srv.before("CREATE", "Risks", (aData) =>{
+    const affctedUser = Array.isArray(aData.data.AffectedUsers) ? aData.data.AffectedUsers : [aData.data.AffectedUsers];
+
+    affctedUser.forEach((oValue) => {
+        let sUserName = new Date().getMilliseconds();
+        oValue.userName = "USER-" + sUserName;
+        });
+  });
 };
