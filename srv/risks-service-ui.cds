@@ -37,6 +37,7 @@ annotate RiskService.Risks with @(
             {Value : title},
             {Value : miti_ID},
             {Value : descr},
+            {Value : bp_BusinessPartner},
             {
                 Value       : prio,
                 Criticality : criticality
@@ -61,7 +62,8 @@ annotate RiskService.Risks with @(
             }
         ],
         FieldGroup #Main : {Data : [
-            {Value : miti_ID},
+            {Value : title},
+            {Value : descr},
             {
                 Value       : prio,
                 Criticality : criticality
@@ -70,8 +72,8 @@ annotate RiskService.Risks with @(
                 Value       : impact,
                 Criticality : criticality
             },
-            {Value : title},
-            {Value : descr},
+            {Value : miti_ID},
+            {Value : bp_BusinessPartner},
             {Value : createdBy},
             {Value : createdAt}
         ]}
@@ -80,32 +82,70 @@ annotate RiskService.Risks with @(
     title  @title : '{i18n>RISK_TITLE}';
     prio   @title : '{i18n>PRIORITY}';
     descr  @title : '{i18n>RISK_DESC}';
-    miti   @title : '{i18n>MITIGATION_ID}';
     impact @title : '{i18n>IMPACT}';
-    miti   @(Common : {
-        //show text, not id for mitigation in the context of risks
-        Text            : miti.description,
-        TextArrangement : #TextSeparate,
+    bp     @title : '{i18n>BP}';
+    miti   @(
+        title  : '{i18n>MITIGATION_ID}',
+        Common : {
+            //show text, not id for mitigation in the context of risks
+            Text            : miti.description,
+            TextArrangement : #TextSeparate,
+            ValueList       : {
+                Label          : 'Mitigations',
+                CollectionPath : 'Mitigations',
+                Parameters     : [
+                    {
+                        $Type             : 'Common.ValueListParameterInOut',
+                        LocalDataProperty : miti_ID,
+                        ValueListProperty : 'ID'
+                    },
+                    {
+                        $Type             : 'Common.ValueListParameterDisplayOnly',
+                        ValueListProperty : 'description'
+                    }
+                ]
+            }
+        }
+    );
+    bp     @(Common : {
+        Text            : bp.LastName,
+        TextArrangement : #TextOnly,
         ValueList       : {
-            Label          : 'Mitigations',
-            CollectionPath : 'Mitigations',
+            Label          : 'Business Partners',
+            CollectionPath : 'BusinessPartners',
             Parameters     : [
                 {
                     $Type             : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : miti_ID,
-                    ValueListProperty : 'ID'
+                    LocalDataProperty : bp_BusinessPartner,
+                    ValueListProperty : 'BusinessPartner'
                 },
                 {
                     $Type             : 'Common.ValueListParameterDisplayOnly',
-                    ValueListProperty : 'description'
+                    ValueListProperty : 'LastName'
+                },
+                {
+                    $Type             : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty : 'FirstName'
                 }
             ]
         }
-    });
+    })
 };
 
+annotate RiskService.AffectedUsers with @Common.SemanticKey : [ID];
+
 annotate RiskService.AffectedUsers with @(UI : {
+    Identification          : [{
+        $Type  : 'UI.DataFieldForAction',
+        Action : 'RiskService.activateOrDeactivateRisk',
+        Label  : 'Activate or Deactivate Risk'
+    }],
     LineItem                : [
+        {
+            $Type  : 'UI.DataFieldForAction',
+            Action : 'RiskService.activateOrDeactivateRisk',
+            Label  : 'Activate or Deactivate Risk'
+        },
         {Value : userName},
         {Value : firstName},
         {Value : lastName},
@@ -162,7 +202,7 @@ annotate RiskService.AffectedUsers with @(UI : {
     FieldGroup #GeneralData : {
         $Type : 'UI.FieldGroupType',
         Data  : [
-             {
+            {
                 $Type : 'UI.DataField',
                 Value : userName
             },
@@ -194,13 +234,13 @@ annotate RiskService.AffectedUsers with @(UI : {
                 $Type : 'UI.DataField',
                 Value : riskActive
             },
-              {
+            {
                 $Type : 'UI.DataField',
                 Value : riskFoundDateTime
             },
             {
                 $Type : 'UI.DataField',
-                Value :userProfileImage
+                Value : userProfileImage
             }
         ]
     },
@@ -238,3 +278,12 @@ annotate RiskService.AffectedUsers with @(UI : {
     riskFoundDateTime @(title : '{i18n>RISK_FOUND_DATETIME}');
     userProfileImage  @(title : '{i18n>PROFILE_IMAGE}')
 };
+
+annotate RiskService.BusinessPartners with {
+    BusinessPartner @(
+        UI.Hidden,
+        Common : {Text : LastName}
+    );
+    LastName        @title : 'Last Name';
+    FirstName       @title : 'First Name';
+}
