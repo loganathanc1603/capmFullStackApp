@@ -119,11 +119,12 @@
                 "RisksObjectPage": {
                     "type": "Component",
                     "id": "RisksObjectPage",
-                    "name": "sap.fe.templates.ObjectPage",
+                    "name": "sap.fe.core.fpm",
                     "options": {
                         "settings": {
-                            "editableHeaderContent": false,
-                            "entitySet": "Risks"
+                            "viewName": "ns.risks.ext.RisksObjectPage",
+                            "entitySet": "Risks",
+                            "navigation":{}
                         }
                     }
                 }

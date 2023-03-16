@@ -6,6 +6,8 @@ default-*.json
 gen/
 node_modules/
 target/
+.cdsrc-private.json
+*/package-lock.json
 .env
 
 # Web IDE, App Studio

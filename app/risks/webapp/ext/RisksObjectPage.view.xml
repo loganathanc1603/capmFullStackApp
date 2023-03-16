@@ -1,0 +1,28 @@
+<mvc:View 
+	xmlns:core="sap.ui.core" 
+	xmlns:mvc="sap.ui.core.mvc" 
+	xmlns="sap.m" 
+	xmlns:macros="sap.fe.macros" 
+	xmlns:html="http://www.w3.org/1999/xhtml" controllerName="ns.risks.ext.RisksObjectPage">
+	<Page id="Form" title="Form">
+		<content>
+			<Panel headerText="Header Information">
+				<macros:Form metaPath="@com.sap.vocabularies.UI.v1.FieldGroup#Main" id="main"/>
+				<VBox width="30vw">
+					<Text text="createdAt" />
+					<macros:Field metaPath="createdAt" id="createdAt"/>
+				</VBox>
+			</Panel>
+			<Panel headerText="Item Details">
+				<macros:Table metaPath="AffectedUsers/@com.sap.vocabularies.UI.v1.LineItem" id="items" />
+			</Panel>
+		</content>
+		<footer>
+			<OverflowToolbar>
+				<ToolbarSpacer />
+				<Button text="Create" press="saveDocument" type="Emphasized" visible="{viewModel>/editable}" />
+				<Button id="cancelButton" text="Cancel" press="cancelDocument" visible="{viewModel>/editable}"/>
+			</OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>

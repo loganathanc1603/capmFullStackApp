@@ -1,89 +1,97 @@
 {
-  "name": "cpapp",
-  "version": "1.0.0",
-  "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "@sap-cloud-sdk/connectivity": "^2.5.0",
-    "@sap-cloud-sdk/http-client": "^2.5.0",
-    "@sap-cloud-sdk/odata-v2": "^2.5.0",
-    "@sap-cloud-sdk/odata-v4": "^2.5.0",
-    "@sap/cds": ">=5",
-    "@sap/cds-odata-v2-adapter-proxy": "^1.9.0",
-    "@sap/ui5-visual-editor": "^1.1.21",
-    "@sap/xsenv": "^3.3.2",
-    "@sap/xssec": "^3.2.13",
-    "express": "^4",
-    "generator-easy-ui5": "^3.0.1",
-    "hdb": "^0.19.0",
-    "passport": "^0.4.1"
-  },
-  "devDependencies": {
-    "@sap-cloud-sdk/generator": "^2.5.0",
-    "@sap/ux-specification": "^1.102.1",
-    "sqlite3": "^5.0.4"
-  },
-  "engines": {
-    "node": ">=14"
-  },
-  "scripts": {
-    "start": "cds run"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "es2020": true,
-      "node": true,
-      "jest": true,
-      "mocha": true
+    "name": "cpapp",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap-cloud-sdk/connectivity": "^3.0.1",
+        "@sap-cloud-sdk/http-client": "^3.0.1",
+        "@sap-cloud-sdk/odata-v2": "^3.0.1",
+        "@sap-cloud-sdk/odata-v4": "^3.0.1",
+        "@sap/cds": ">=6",
+        "@sap/cds-odata-v2-adapter-proxy": "^1.9.0",
+        "@sap/ui5-visual-editor": "^1.1.21",
+        "@sap/xsenv": "^3.3.2",
+        "@sap/xssec": "^3.2.13",
+        "express": "^4",
+        "generator-easy-ui5": "^3.0.1",
+        "hdb": "^0.19.0",
+        "passport": "^0.6.0"
     },
-    "globals": {
-      "SELECT": true,
-      "INSERT": true,
-      "UPDATE": true,
-      "DELETE": true,
-      "CREATE": true,
-      "DROP": true,
-      "CDL": true,
-      "CQL": true,
-      "CXL": true,
-      "cds": true
+    "devDependencies": {
+        "@sap-cloud-sdk/generator": "^3.0.1",
+        "@sap/ux-specification": "^1.108.0",
+        "rimraf": "^3.0.2",
+        "sqlite3": "^5.0.4"
     },
-    "rules": {
-      "no-console": "off",
-      "require-atomic-updates": "off"
-    }
-  },
-  "sapux": [
-    "app/risks"
-  ],
-  "cds": {
-    "requires": {
-      "API_BUSINESS_PARTNER": {
-        "kind": "odata",
-        "model": "srv/external/API_BUSINESS_PARTNER",
-        "[development]": {
-          "credentials": {
-            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_BUSINESS_PARTNER/"
-          }
+    "engines": {
+        "node": ">=14"
+    },
+    "scripts": {
+        "start": "cds run",
+        "watch-risk_ext_app": "cds watch --open risk_ext_app/webapp/index.html?sap-ui-xx-viewCache=false",
+        "undeploy": "cf undeploy cpapp --delete-services --delete-service-keys --delete-service-brokers",
+        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+        "watch-riskextapp": "cds watch --open riskextapp/webapp/index.html?sap-ui-xx-viewCache=false"
+    },
+    "eslintConfig": {
+        "extends": "eslint:recommended",
+        "env": {
+            "es2020": true,
+            "node": true,
+            "jest": true,
+            "mocha": true
         },
-        "[production]": {
-          "credentials": {
-            "destination": "API_BUSINESS_PARTNER"
-          }
+        "globals": {
+            "SELECT": true,
+            "INSERT": true,
+            "UPDATE": true,
+            "DELETE": true,
+            "CREATE": true,
+            "DROP": true,
+            "CDL": true,
+            "CQL": true,
+            "CXL": true,
+            "cds": true
+        },
+        "rules": {
+            "no-console": "off",
+            "require-atomic-updates": "off"
         }
-      },
-      "db": {
-        "kind": "sql"
-      },
-      "xsuaa": {
-        "kind": "xsuaa"
-      }
     },
-    "hana": {
-      "deploy-format": "hdbtable"
+    "sapux": [
+        "app/risks",
+        "app/risk_ext_app",
+        "app/riskextapp"
+    ],
+    "cds": {
+        "requires": {
+            "API_BUSINESS_PARTNER": {
+                "kind": "odata",
+                "model": "srv/external/API_BUSINESS_PARTNER",
+                "[development]": {
+                    "credentials": {
+                        "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_BUSINESS_PARTNER/"
+                    }
+                },
+                "[production]": {
+                    "credentials": {
+                        "destination": "API_BUSINESS_PARTNER"
+                    }
+                }
+            },
+            "db": {
+                "kind": "sql"
+            },
+            "xsuaa": {
+                "kind": "xsuaa"
+            }
+        },
+        "hana": {
+            "deploy-format": "hdbtable"
+        }
     }
-  }
 }
