@@ -1,16 +1,110 @@
 <mvc:View 
 	xmlns:core="sap.ui.core" 
 	xmlns:mvc="sap.ui.core.mvc" 
-	xmlns="sap.m" 
+	xmlns:m="sap.m"
+	xmlns:layout="sap.ui.layout"
+	xmlns="sap.uxap"
 	xmlns:macros="sap.fe.macros" 
 	xmlns:html="http://www.w3.org/1999/xhtml" controllerName="ns.risks.ext.RisksObjectPage">
-	<Page id="Form" title="Form">
+	<m:Page
+		id="floatingFooterPage"
+		title="Floating Footer Example"
+		floatingFooter="true"
+		class="sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer sapUiResponsivePadding--floatingFooter">
+		<ObjectPageLayout id="ObjectPageLayout"
+		enableLazyLoading="true"
+		useIconTabBar="false"
+		busy="{ui>/busy}"
+		showTitleInHeaderContent="true"
+		upperCaseAnchorBar="false">
+			<headerTitle>
+			<ObjectPageDynamicHeaderTitle>
+				<expandedHeading>
+					<m:Title text="{title}" wrapping="true"/>
+				</expandedHeading>
+
+				<snappedHeading>
+					<m:FlexBox fitContainer="true" alignItems="Center">					
+						<m:Title text="{title}" wrapping="true" />
+					</m:FlexBox>
+				</snappedHeading>
+
+				<expandedContent>
+					<m:FlexBox fitContainer="true" alignItems="Center">					
+						<m:Title text="{title}" wrapping="true" />
+					</m:FlexBox>
+				</expandedContent>
+
+				<!-- <snappedContent>
+					<macros:Field metaPath="title" id="title2"/>
+				</snappedContent> -->
+
+				<!-- <snappedTitleOnMobile>
+				<macros:Field metaPath="title" id="title3"/>
+				</snappedTitleOnMobile> -->
+
+				<actions>
+					<m:Button id="editAction" text="Edit" press="onEdit" visible="{= !${ui>/isEditable} }" type="Emphasized"/>
+				</actions>
+			</ObjectPageDynamicHeaderTitle>
+		</headerTitle>
+			<sections>
+			<ObjectPageSection titleUppercase="false" title="Risk Information">
+				<subSections>
+					<ObjectPageSubSection title="Risk Information" titleUppercase="false">
+						<blocks>
+							<!-- <macros:Form metaPath="@com.sap.vocabularies.UI.v1.FieldGroup#Main" id="main"/> -->
+							<!-- <m:VBox width="30vw">
+								<m:Text text="title" />
+								<macros:Field metaPath="title" id="createdAt" change="onChange"/>
+							</m:VBox> -->
+								<m:FlexBox alignItems="Center" justifyContent="Begin">
+									<m:Label text="Risk Title" class="sapUiSmallMarginEnd" />
+									<macros:Field metaPath="title" id="TitleId1" />
+								</m:FlexBox>
+								<m:FlexBox alignItems="Center" justifyContent="Begin">
+									<m:Label text="Risk Description" class="sapUiSmallMarginEnd" />
+									<macros:Field metaPath="descr" id="descrId1" />
+								</m:FlexBox>
+								<m:FlexBox alignItems="Center" justifyContent="Begin">
+									<m:Label text="Impact" class="sapUiSmallMarginEnd" />
+									<macros:Field metaPath="impact" id="impactId1" />
+								</m:FlexBox>
+								<m:FlexBox alignItems="Center" justifyContent="Begin">
+									<m:Label text="Priority" class="sapUiSmallMarginEnd" />
+									<macros:Field metaPath="prio" id="prioId1" />
+								</m:FlexBox>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+			<ObjectPageSection titleUppercase="false" title="Affected Users">
+				<subSections>
+					<ObjectPageSubSection title="Affected Users" titleUppercase="false">
+						<blocks>
+							<macros:Table metaPath="AffectedUsers/@com.sap.vocabularies.UI.v1.LineItem" id="items"/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+				</sections>
+		</ObjectPageLayout>
+			<m:footer>
+			<m:OverflowToolbar>
+				<m:DraftIndicator id="draftIndi" state="{ui>/draftStatus}"/>
+				<m:ToolbarSpacer />
+				<m:Button text="Create" press="onSave" type="Emphasized" visible="{ui>/isEditable}" />
+				<m:Button id="cancelButton" text="Cancel" press="onCancel" visible="{ui>/isEditable}"/>
+			</m:OverflowToolbar>
+		</m:footer>
+	</m:Page>
+	<!-- <Page id="Form" title="Risk Information" busy="{ui>/busy}">
 		<content>
 			<Panel headerText="Header Information">
 				<macros:Form metaPath="@com.sap.vocabularies.UI.v1.FieldGroup#Main" id="main"/>
 				<VBox width="30vw">
-					<Text text="createdAt" />
-					<macros:Field metaPath="createdAt" id="createdAt"/>
+					<Text text="Title" />
+					<macros:Field metaPath="title" id="createdAt" change="onChange"/>
 				</VBox>
 			</Panel>
 			<Panel headerText="Item Details">
@@ -19,10 +113,12 @@
 		</content>
 		<footer>
 			<OverflowToolbar>
+				<DraftIndicator id="draftIndi" state="{ui>/draftStatus}"/>
 				<ToolbarSpacer />
-				<Button text="Create" press="saveDocument" type="Emphasized" visible="{viewModel>/editable}" />
-				<Button id="cancelButton" text="Cancel" press="cancelDocument" visible="{viewModel>/editable}"/>
+				<Button text="Edit" press="onEdit" visible="{= !${ui>/isEditable} }"></Button>
+				<Button text="Create" press="onSave" type="Emphasized" visible="{ui>/isEditable}" />
+				<Button id="cancelButton" text="Cancel" press="onCancel" visible="{ui>/isEditable}"/>
 			</OverflowToolbar>
 		</footer>
-	</Page>
+	</Page> -->
 </mvc:View>

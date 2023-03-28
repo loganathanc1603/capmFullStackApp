@@ -37,7 +37,7 @@ annotate RiskService.Risks with @(
             {Value : title},
             {Value : miti_ID},
             {Value : descr},
-            {Value : bp_BusinessPartner},
+           // {Value : bp_BusinessPartner},
             {
                 Value       : prio,
                 Criticality : criticality
@@ -73,7 +73,7 @@ annotate RiskService.Risks with @(
                 Criticality : criticality
             },
             {Value : miti_ID},
-            {Value : bp_BusinessPartner},
+           // {Value : bp_BusinessPartner},
             {Value : createdBy},
             {Value : createdAt}
         ]}
@@ -83,7 +83,7 @@ annotate RiskService.Risks with @(
     prio   @title : '{i18n>PRIORITY}';
     descr  @title : '{i18n>RISK_DESC}';
     impact @title : '{i18n>IMPACT}';
-    bp     @title : '{i18n>BP}';
+ //  bp     @title : '{i18n>BP}';
     miti   @(
         title  : '{i18n>MITIGATION_ID}',
         Common : {
@@ -107,29 +107,29 @@ annotate RiskService.Risks with @(
             }
         }
     );
-    bp     @(Common : {
-        Text            : bp.LastName,
-        TextArrangement : #TextOnly,
-        ValueList       : {
-            Label          : 'Business Partners',
-            CollectionPath : 'BusinessPartners',
-            Parameters     : [
-                {
-                    $Type             : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : bp_BusinessPartner,
-                    ValueListProperty : 'BusinessPartner'
-                },
-                {
-                    $Type             : 'Common.ValueListParameterDisplayOnly',
-                    ValueListProperty : 'LastName'
-                },
-                {
-                    $Type             : 'Common.ValueListParameterDisplayOnly',
-                    ValueListProperty : 'FirstName'
-                }
-            ]
-        }
-    })
+    // bp     @(Common : {
+    //     Text            : bp.LastName,
+    //     TextArrangement : #TextOnly,
+    //     ValueList       : {
+    //         Label          : 'Business Partners',
+    //         CollectionPath : 'BusinessPartners',
+    //         Parameters     : [
+    //             {
+    //                 $Type             : 'Common.ValueListParameterInOut',
+    //                 LocalDataProperty : bp_BusinessPartner,
+    //                 ValueListProperty : 'BusinessPartner'
+    //             },
+    //             {
+    //                 $Type             : 'Common.ValueListParameterDisplayOnly',
+    //                 ValueListProperty : 'LastName'
+    //             },
+    //             {
+    //                 $Type             : 'Common.ValueListParameterDisplayOnly',
+    //                 ValueListProperty : 'FirstName'
+    //             }
+    //         ]
+    //     }
+    // })
 };
 
 annotate RiskService.AffectedUsers with @Common.SemanticKey : [ID];
@@ -279,11 +279,11 @@ annotate RiskService.AffectedUsers with @(UI : {
     userProfileImage  @(title : '{i18n>PROFILE_IMAGE}')
 };
 
-annotate RiskService.BusinessPartners with {
-    BusinessPartner @(
-        UI.Hidden,
-        Common : {Text : LastName}
-    );
-    LastName        @title : 'Last Name';
-    FirstName       @title : 'First Name';
-}
+// annotate RiskService.BusinessPartners with {
+//     BusinessPartner @(
+//         UI.Hidden,
+//         Common : {Text : LastName}
+//     );
+//     LastName        @title : 'Last Name';
+//     FirstName       @title : 'First Name';
+// }

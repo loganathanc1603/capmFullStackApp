@@ -31,3 +31,15 @@ http://localhost:4004/risks/webapp/index.html
 1. Active NodeJS LTS (Long Term Support) version and associated supported NPM version.  (See https://nodejs.org)
 
 
+ "type": "Component",
+                    "id": "RisksObjectPage",
+                    "name": "sap.fe.core.fpm",
+                    "options": {
+                        "settings": {
+                            "viewName": "ns.risks.ext.RisksObjectPage",
+                            "entitySet": "Risks",
+                            "navigation":{}
+                        }
+                    }
+
+

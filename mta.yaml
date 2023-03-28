@@ -82,14 +82,6 @@ modules:
       - nsmitigations.zip
       name: nsmitigations
       target-path: resources/
-    - artifacts:
-      - comnpriskextriskextapp.zip
-      name: comnpriskextriskextapp
-      target-path: resources/
-    - artifacts:
-      - comnsriskextapp.zip
-      name: comnsriskextapp
-      target-path: resources/
 - name: nsrisks
   type: html5
   path: app/risks
@@ -103,26 +95,6 @@ modules:
 - name: nsmitigations
   type: html5
   path: app/mitigations
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: comnpriskextriskextapp
-  type: html5
-  path: app/risk_ext_app
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: comnsriskextapp
-  type: html5
-  path: app/riskextapp
   build-parameters:
     build-result: dist
     builder: custom

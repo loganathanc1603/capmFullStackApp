@@ -112,19 +112,19 @@
                                         "route": "RisksObjectPage"
                                     }
                                 }
-                            }
+                            },
+                            "initialLoad": true
                         }
                     }
                 },
                 "RisksObjectPage": {
                     "type": "Component",
                     "id": "RisksObjectPage",
-                    "name": "sap.fe.core.fpm",
+                    "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
-                            "viewName": "ns.risks.ext.RisksObjectPage",
-                            "entitySet": "Risks",
-                            "navigation":{}
+                            "editableHeaderContent": false,
+                            "entitySet": "Risks"
                         }
                     }
                 }
@@ -133,6 +133,11 @@
         "contentDensities": {
             "compact": true,
             "cozy": true
+        },
+        "extends": {
+            "extensions": {
+                "sap.ui.controllerExtensions": {}
+            }
         }
     },
     "sap.platform.abap": {
